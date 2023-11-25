@@ -2,20 +2,27 @@
 
 // Delare variable table, with global scope
 let table;
-let counts = 47;
+let counts = 300;
 let countries = [];
 let slider;
 var T = 150;
 var t = 0;
 var tdelta = T/5;
 var Ascale = -280;
-var CircleSizeScale = 1.5;
+let move = 0;
+var CircleSizeScale = 1;
+var unitdefault = 1000; //tonnses
+var unitfoodcapita = 1; //kg/capita/year
+let startX; // 鼠标按下时的y坐标
+let draggedDistance; // 鼠标拖动的距离
 let year_now = 1978;
 let foodName_now = 'apples';
 // let input_csvfile_food = "milk";
 // let input_csvfile_element = "Production";
 // let input_csvfile = input_csvfile_food + ".csv";
 let FoodNames_list = ['apples', 'bananas', 'beer', 'bovine_meat', 'cocoa_beans', 'coconut_oil', 'coffee', 'eggs', 'fish_seafood', 'maize', 'milk', 'oats', 'offals_edible', 'oliver_oil', 'pepper', 'pigmeat', 'plantains', 'potatoes', 'rice', 'sorghum', 'sweet_potatoes', 'tea', 'tomatoes', 'wheat'];
+
+
 
 
 function preload() {
@@ -52,7 +59,7 @@ function setup() {
   angleMode(DEGREES);
 
   slider = createSlider(1973, 2019, year_now);
-  slider.position(windowWidth/2-250, 4/5*windowHeight);
+  slider.position(windowWidth/2-250, 82/100*windowHeight);
   slider.style('width', '500px');
 
   // create select box
@@ -64,53 +71,60 @@ function setup() {
     sel.option(FoodNames_list[i]);
   }
 
-  creatCountries();
+  createCountries();
 }
 
 function draw() {
   createCanvas(windowWidth, windowHeight);
   background(26,26,26);
-
-  let year_get = slider.value();
-  let foodName_get = sel.value();
   
-  if (year_get != year_now) {
-    text("Changing",120,120);
-    creatCountries();
-  } 
-  else {
-    if (foodName_now != foodName_get) {
-      creatCountries();
-    }
-    else {
-      text("Nochange",120,120);
-    }
-    text("Nochange",120,120);
-  }
-
+  // 使用鼠标的位置来设置圆的位置
   push();
-  textAlign(CENTER,CENTER);
-  fill(250,250,250);
-  textSize(36);
-  rectMode(CENTER);
-  text (year_get, windowWidth/2, windowHeight/15);
-  pop ();
+  fill(255, 255, 255,30); 
+  noStroke(); // 不绘制边框
+  ellipse(mouseX, mouseY, CircleSizeScale*20, CircleSizeScale*20); // 在鼠标的位置画一个直径为50的圆
+  pop();
 
-  translate(windowWidth/13, windowHeight/2);
-  if (countries.length > counts) {
-    for (let i = 0; i < counts; i++) {
-      countries[i].display();
-    }
+  // 如果鼠标接近屏幕右侧，内容向左移动
+  if (mouseX > width * 0.80 && mouseY > height*0.5) {
+    move -= 1;
   }
-  else {
-    for (let i = 0; i < countries.length; i++) {
-      countries[i].display();
-    }
+  // 如果鼠标接近屏幕左侧，内容向右移动
+  if (mouseX < width * 0.20 && mouseY > height*0.5) {
+    move += 1;
   }
+
+  if (mouseX > width * 0.90 && mouseY > height*0.5) {
+    move -= 3;
+  }
+  // 如果鼠标接近屏幕左侧，内容向右移动
+  if (mouseX < width * 0.10 && mouseY > height*0.5) {
+    move += 3;
+  }
+  
+  ifcreateCountries ();
+  
   // noLoop();
 }
 
-function creatCountries() {
+function mousePressed() {
+  // 当鼠标按下时，记录y坐标
+  startX = mouseX;
+}
+
+function mouseDragged() {
+  draggedDistance = mouseX - startX;
+  // 使用鼠标的垂直位置来调整大小
+  if (mouseX > width*0.7 && mouseY < height*0.3) {
+    CircleSizeScale = map(draggedDistance, 0, 200, 0, 10);
+  }
+}
+
+function doubleClicked() {
+  CircleSizeScale = 1;
+}
+
+function createCountries() {
   let year_get = slider.value();
   let foodName_get = sel.value();
 
@@ -124,7 +138,7 @@ function creatCountries() {
     let country = new Country(600, -100, "Opp..there is no data", 5000, 5000, 0, 0, 0);
     countries.push(country);
   }
-  else{
+  if (table2.length > counts) {
     for (let r = 0; r < counts; r++) {
       let name = table2[r].getString('CountryorArea');
       var ifcellempty = table2[r].getString('Production');
@@ -138,7 +152,7 @@ function creatCountries() {
       var ifcellempty = table2[r].getString('Processing');
       var processing = ifcellempty ? table2[r].getNum('Processing') : 0;
   
-      let x = t;
+      let x = t+move;
       let y = Ascale*sin(360/T*t);
   
       // Create new instance of country
@@ -149,6 +163,86 @@ function creatCountries() {
       t += tdelta;
     }
   }
+  if (table2.length <= counts) {
+    for (let r = 0; r < table2.length; r++) {
+      let name = table2[r].getString('CountryorArea');
+      var ifcellempty = table2[r].getString('Production');
+      var production = ifcellempty ? table2[r].getNum('Production') : 0;
+      var ifcellempty = table2[r].getString('Domestic supply quantity');
+      var domsly = ifcellempty ? table2[r].getNum('Domestic supply quantity') : 0;
+      var ifcellempty = table2[r].getString('Food');
+      var food = ifcellempty ? table2[r].getNum('Food') : 0;
+      var ifcellempty = table2[r].getString('Food supply quantity (kg/capita/yr)');
+      var foodcapita = ifcellempty ? table2[r].getNum('Food supply quantity (kg/capita/yr)') : 0;
+      var ifcellempty = table2[r].getString('Processing');
+      var processing = ifcellempty ? table2[r].getNum('Processing') : 0;
+  
+      let x = t+move;
+      let y = Ascale*sin(360/T*t);
+  
+      // Create new instance of country
+      let country = new Country(x, y, name, production, domsly, food, foodcapita, processing);
+  
+      // Create a list of country objects
+      countries.push(country);
+      t += tdelta;
+    }
+  }
+
   year_now = year_get;
   foodName_now = foodName_get;
+}
+
+function ifcreateCountries () {
+  push();
+  let year_get = slider.value();
+  // let foodName_get = sel.value();
+  // if (year_get != year_now) {
+  //   text("Changing",120,120);
+  //   createCountries();
+  // } 
+  // else {
+  //   if (foodName_now != foodName_get) {
+  //     createCountries();
+  //   }
+  //   else {
+  //     text("Nochange",120,120);
+  //   }
+  //   text("Nochange",120,120);
+  // }
+  createCountries();
+
+  // Show the year now
+  push();
+  textAlign(CENTER,CENTER);
+  fill(250,250,250);
+  textSize(36);
+  rectMode(CENTER);
+  text (year_get, windowWidth/2, windowHeight/15);
+  pop ();
+
+  // Show the unit
+  let unitnow = unitdefault/CircleSizeScale;
+  let unitfoodcapitanow =unitfoodcapita/CircleSizeScale;
+  push();
+  textAlign(LEFT,TOP);
+  fill(250,250,250);
+  textSize(10);
+  rectMode(CENTER);
+  text("Unit of Food Production, Domestic Supply Quantity, Food Used for Processing and Food Used for Food is: "+unitnow+" tonnes",windowWidth/2+300,20,300);
+  text("Unit of Food Supply Quantity is: "+unitfoodcapitanow+" kg/capita/year",windowWidth/2+300+320,20,300);
+  pop();
+
+  translate(windowWidth/13, windowHeight/2);
+  if (countries.length > counts) {
+    for (let i = 0; i < counts; i++) {
+      countries[i].display();
+    }
+  }
+  else {
+    for (let i = 0; i < countries.length; i++) {
+      countries[i].display();
+    }
+  }
+  pop();
 }

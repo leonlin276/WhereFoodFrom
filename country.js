@@ -19,7 +19,7 @@ class Country {
     display(){
       // circleSize_production: 
       // let circleSize_production = map(this.production,1000,8500000,20,500);
-      let circleSize_production = sqrt(this.production)*CircleSizeScale;
+      let circleSize_production = sqrt(this.production*CircleSizeScale);
       push();
       fill(242,206,62,230);
       noStroke();
@@ -27,7 +27,7 @@ class Country {
       pop();
 
       // circleSize_domsly: 
-      let circleSize_domsly = sqrt(this.domsly)*CircleSizeScale;
+      let circleSize_domsly = sqrt(this.domsly*CircleSizeScale);
       push();
       fill(71,165,119,180);
       noStroke();
