@@ -17,6 +17,8 @@ let startX; // 鼠标按下时的y坐标
 let draggedDistance; // 鼠标拖动的距离
 let year_now = 1978;
 let foodName_now = 'apples';
+
+
 // let input_csvfile_food = "milk";
 // let input_csvfile_element = "Production";
 // let input_csvfile = input_csvfile_food + ".csv";
@@ -102,8 +104,23 @@ function draw() {
     move += 3;
   }
   
+  // triangle: 
+  push();
+  noStroke();
+  fill(255, 255, 255,50); 
+  // (righttop,Start,rightbtm);
+  let triangleStartX = windowWidth*0.7-120;
+  let triangleStartY = windowHeight*0.05;
+  let triangleSide12X = triangleStartX+500;
+  let triangleSide1Y = triangleStartY;
+  let triangleSide2Y = triangleStartY +30;  
+  triangle(triangleSide12X , triangleSide1Y, triangleStartX, triangleStartY, triangleSide12X , triangleSide2Y); 
+  pop();
+
   ifcreateCountries ();
   
+
+
   // noLoop();
 }
 
