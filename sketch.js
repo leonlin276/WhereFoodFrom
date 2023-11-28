@@ -89,19 +89,19 @@ function draw() {
 
   // 如果鼠标接近屏幕右侧，内容向左移动
   if (mouseX > width * 0.80 && mouseY > height*0.5) {
-    move -= 1;
-  }
-  // 如果鼠标接近屏幕左侧，内容向右移动
-  if (mouseX < width * 0.20 && mouseY > height*0.5) {
-    move += 1;
-  }
-
-  if (mouseX > width * 0.90 && mouseY > height*0.5) {
     move -= 3;
   }
   // 如果鼠标接近屏幕左侧，内容向右移动
-  if (mouseX < width * 0.10 && mouseY > height*0.5) {
+  if (mouseX < width * 0.20 && mouseY > height*0.5) {
     move += 3;
+  }
+
+  if (mouseX > width * 0.90 && mouseY > height*0.5) {
+    move -= 7;
+  }
+  // 如果鼠标接近屏幕左侧，内容向右移动
+  if (mouseX < width * 0.10 && mouseY > height*0.5) {
+    move += 7;
   }
   
   // triangle: 
