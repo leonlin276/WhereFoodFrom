@@ -17,6 +17,7 @@ let startX; // 鼠标按下时的y坐标
 let draggedDistance; // 鼠标拖动的距离
 let year_now = 1978;
 let foodName_now = 'apples';
+// let selectedCountry = null;
 
 
 // let input_csvfile_food = "milk";
@@ -57,16 +58,22 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let canvas = createCanvas(windowWidth, windowHeight*1.1);
+  background(0, 0, 0, 255*0.8);
+  canvas.parent('p5canvas');
   angleMode(DEGREES);
 
-  slider = createSlider(1973, 2019, year_now);
-  slider.position(windowWidth/2-250, 82/100*windowHeight);
+  slider = createSlider(1960, 2019, year_now);
+  slider.position(windowWidth/2-250, 720);
   slider.style('width', '500px');
+
+  sliderscaleadjust = createSlider(0, 2000, CircleSizeScale*100);
+  sliderscaleadjust.position(windowWidth/2+140, 235);
+  sliderscaleadjust.style('width', '550px');
 
   // create select box
   sel = createSelect();
-  sel.position(windowWidth/2-50,windowHeight/64*9);
+  sel.position(windowWidth/2-50,170);
   sel.id('foodName');
   // create select box options
   for(let i=0; i<FoodNames_list.length; i++) {
@@ -77,8 +84,12 @@ function setup() {
 }
 
 function draw() {
-  createCanvas(windowWidth, windowHeight);
-  background(26,26,26);
+  // createCanvas(windowWidth, windowHeight*1.4);
+  clear();
+  background(0, 0, 0, 255*0.8);
+
+  let scale_get = sliderscaleadjust.value();
+  CircleSizeScale = map(scale_get, 0, 2000, 0, 20);
   
   // 使用鼠标的位置来设置圆的位置
   push();
@@ -88,57 +99,74 @@ function draw() {
   pop();
 
   // 如果鼠标接近屏幕右侧，内容向左移动
-  if (mouseX > width * 0.80 && mouseY > height*0.5) {
+  if (mouseX > width * 0.80 && mouseY > height*0.2 && mouseY < windowHeight*1) {
     move -= 3;
   }
   // 如果鼠标接近屏幕左侧，内容向右移动
-  if (mouseX < width * 0.20 && mouseY > height*0.5) {
+  if (mouseX < width * 0.20 && mouseY > height*0.2 && mouseY < windowHeight*1) {
     move += 3;
   }
 
-  if (mouseX > width * 0.90 && mouseY > height*0.5) {
+  if (mouseX > width * 0.90 && mouseY > height*0.2 && mouseY < windowHeight*1) {
     move -= 7;
   }
   // 如果鼠标接近屏幕左侧，内容向右移动
-  if (mouseX < width * 0.10 && mouseY > height*0.5) {
+  if (mouseX < width * 0.10 && mouseY > height*0.2 && mouseY < windowHeight*1) {
     move += 7;
   }
   
-  // triangle: 
-  push();
-  noStroke();
-  fill(255, 255, 255,50); 
-  // (righttop,Start,rightbtm);
-  let triangleStartX = windowWidth*0.7-120;
-  let triangleStartY = windowHeight*0.05;
-  let triangleSide12X = triangleStartX+500;
-  let triangleSide1Y = triangleStartY;
-  let triangleSide2Y = triangleStartY +30;  
-  triangle(triangleSide12X , triangleSide1Y, triangleStartX, triangleStartY, triangleSide12X , triangleSide2Y); 
-  pop();
+  // // triangle: 
+  // push();
+  // noStroke();
+  // fill(255, 255, 255,50); 
+  // // (righttop,Start,rightbtm);
+  // let triangleStartX = windowWidth*0.7-120;
+  // let triangleStartY = windowHeight*0.05;
+  // let triangleSide12X = triangleStartX+500;
+  // let triangleSide1Y = triangleStartY;
+  // let triangleSide2Y = triangleStartY +30;  
+  // triangle(triangleSide12X , triangleSide1Y, triangleStartX, triangleStartY, triangleSide12X , triangleSide2Y); 
+  // pop();
 
   ifcreateCountries ();
+  drawlegend ();
   
-
-
   // noLoop();
 }
 
-function mousePressed() {
-  // 当鼠标按下时，记录y坐标
-  startX = mouseX;
-}
 
-function mouseDragged() {
-  draggedDistance = mouseX - startX;
-  // 使用鼠标的垂直位置来调整大小
-  if (mouseX > width*0.7 && mouseY < height*0.3) {
-    CircleSizeScale = map(draggedDistance, 0, 200, 0, 10);
-  }
-}
+// function mousePressed() {
+//   for (let i = 0; i < countries.length; i++) {
+//     if (countries[i].contains(mouseX, mouseY)) {
+//       if (selectedCountry != null) {
+//         selectedCountry.deselect();
+//         selectedCountry = null;
+//       } else {
+//       selectedCountry = countries[i];
+//       console.log (selectedCountry);
+//       selectedCountry.select();
+//       break;
+//       }
+//     }
+//   }
+// }
+
+// function mousePressed() {
+//   // 当鼠标按下时，记录y坐标
+//   startX = mouseX;
+// }
+
+// function mouseDragged() {
+//   draggedDistance = mouseX - startX;
+//   // 使用鼠标的垂直位置来调整大小
+//   if (mouseX > width*0.7 && mouseY < height*0.3) {
+//     CircleSizeScale = map(draggedDistance, 0, 200, 0, 10);
+//   }
+// }
 
 function doubleClicked() {
   CircleSizeScale = 1;
+  sliderscaleadjust.value(100);
 }
 
 function createCountries() {
@@ -235,22 +263,22 @@ function ifcreateCountries () {
   fill(250,250,250);
   textSize(36);
   rectMode(CENTER);
-  text (year_get, windowWidth/2, windowHeight/15);
+  text (year_get, windowWidth/2+310, 655-131.6);
   pop ();
 
   // Show the unit
   let unitnow = unitdefault/CircleSizeScale;
-  let unitfoodcapitanow =unitfoodcapita/CircleSizeScale;
+  let unitfoodcapitanow =unitfoodcapita/CircleSizeScale/20;
   push();
   textAlign(LEFT,TOP);
   fill(250,250,250);
   textSize(10);
   rectMode(CENTER);
-  text("Unit of Food Production, Domestic Supply Quantity, Food Used for Processing and Food Used for Food is: "+unitnow+" tonnes",windowWidth/2+300,20,300);
-  text("Unit of Food Supply Quantity is: "+unitfoodcapitanow+" kg/capita/year",windowWidth/2+300+320,20,300);
+  text("Unit of Food Production, Domestic Supply Quantity, Food Used for Processing and Food Used for Food is: "+unitnow+" tonnes",windowWidth/2+280,55,300);
+  text("Unit of Food Supply Quantity is: "+unitfoodcapitanow+" kg/capita/year",windowWidth/2+280+310,55,300);
   pop();
 
-  translate(windowWidth/13, windowHeight/2);
+  translate(windowWidth/13, windowHeight/2+50);
   if (countries.length > counts) {
     for (let i = 0; i < counts; i++) {
       countries[i].display();
@@ -262,4 +290,17 @@ function ifcreateCountries () {
     }
   }
   pop();
+}
+
+function drawlegend() {
+  let x = 60;
+  let y = 40;
+  let name = 'Example Country';
+  let production = 2500;
+  let domsly = 2500; 
+  let food = domsly *0.7;
+  let processing = domsly *0.3;
+  let foodcapita = 18; 
+  countryexample = new Country (x, y, name, production, domsly, food, foodcapita, processing);
+  countryexample.displaylegend();
 }
