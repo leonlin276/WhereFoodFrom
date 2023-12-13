@@ -1,7 +1,7 @@
 // arc: https://vimsky.com/examples/usage/p5-js-arc-function.html
 
 class Country {
-    constructor(x, y, Name, Production, Domsly, Food, FoodCapita, Processing) {
+    constructor(x, y, Name, Production, Domsly, Food, FoodCapita, Processing, Rank, Seq) {
       this.x = x;
       this.y = y;
       this.name = Name;
@@ -10,16 +10,65 @@ class Country {
       this.food = Food || 0;
       this.processing = Processing || 0;
       this.foodcapita = FoodCapita || 0;
-      // this.selected = false;
+      this.rank = Rank;
+      this.seq = Seq;
+      this.selected = false;
+      this.if_hightlight = false;
     }
 
     getName(){
       return this.name;
     }
 
-    display(){
+    draw_tooltip() {
+      let tooltipText = 'Country: '+this.name+'\n'+
+      'Production: '+this.production*1000+' tonnes'+'\n'+
+      'Domestic Supply: '+this.domsly*1000+' tonnes'+'\n'+
+      'For Processing: '+this.processing*1000+' tonnes'+'\n'+
+      'For Eating: '+this.food*1000+' tonnes'+'\n'+
+      'Capita: '+this.foodcapita+' kg/capita/year'+'\n'+
+      'Rank: '+this.rank+'\n'+
+      'Sequence: '+this.seq;
+      
+      if (tooltipText) {
+        // measure the width of the tooltip
+        let w = textWidth(tooltipText);
+        let h = textSize(tooltipText); 
+    
+        push();
+        // draw a lightgray rectangle with a dimgray border
+        fill('lightgray');
+        stroke('dimgray');
+        strokeWeight(1);
+        // draw this rectangle slightly below and to the
+        // right of the mouse
+        rect(mouseX + 10, mouseY + 10, w + 20, (h+5)*8, 5);
+        textAlign(LEFT, TOP);
+        noStroke();
+        fill('black');
+        text(tooltipText, mouseX + 20, mouseY + 20);
+        pop();
+      }
+    }
+
+    hightlight() {
+      this.if_hightlight = true;
+    }
+
+
+    display() {
+      let circleSize_domsly = sqrt(this.domsly*CircleSizeScale);
+
+      // draw hightlight: 
+      if (this.if_hightlight) {
+        push();
+        fill(71,165,119,50);
+        noStroke();
+        circle(this.x+15, this.y, circleSize_domsly+100);
+        pop(); 
+      }
+
       // circleSize_production: 
-      // let circleSize_production = map(this.production,1000,8500000,20,500);
       let circleSize_production = sqrt(this.production*CircleSizeScale);
       push();
       fill(242,206,62,230);
@@ -28,7 +77,6 @@ class Country {
       pop();
 
       // circleSize_domsly: 
-      let circleSize_domsly = sqrt(this.domsly*CircleSizeScale);
       push();
       fill(71,165,119,180);
       noStroke();
@@ -73,11 +121,11 @@ class Country {
     }
 
     displaylegend() {
-      // circleSize_production: 
-      // let circleSize_production = map(this.production,1000,8500000,20,500);
       let i = 100;
       let v = 40;
       let w = 80;
+      
+      // circleSize_production: 
       let circleSize_production = sqrt(this.production);
       push();
       fill(242,206,62,230);
@@ -147,31 +195,18 @@ class Country {
       rectMode(CENTER);
       text('Food Used for Processing', this.x, this.y+v, 120);
       pop();
-
-      // // draw the country circle: 
-      // push();
-      // textAlign(CENTER,CENTER);
-      // fill(250,250,250);
-      // textSize(14);
-      // rectMode(CENTER);
-      // // text(this.name + '\n' + this.production +'Production', this.x, this.y);
-      // text(this.name, this.x+50, this.y+50, 150);
-      // pop ();
-
-
-
     }
 
-    // contains(px, py) {
-    //   let d = dist(px, py, this.x, this.y);
-    //   return d < 50;
-    // }
+    contains(px, py) {
+      let d = dist(px, py, this.x, this.y);
+      return d < 50;
+    }
 
-    // select() {
-    //   this.selected = true;
-    // }
+    select() {
+      this.selected = true;
+    }
   
-    // deselect() {
-    //   this.selected = false;
-    // }
+    deselect() {
+      this.selected = false;
+    }
 }
