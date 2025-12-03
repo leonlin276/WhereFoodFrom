@@ -11,15 +11,33 @@
 </head>
 
 <body>
-  <div id="p5canvas" style = "position: relative;">
-    <div class = blocktitle>
-      <h1 style="margin-bottom: 30px;">Where are the Food From? And Where do They Go to?</h1>
-      <h2 style="margin-top: 0px; margin-bottom: 70px">Choose a Food to See</h2>
-    </div>
-    <script src="sketch.js"></script>
-    <script src="country.js"></script>
+
+  <div class="data-source">
+    <span><strong>Data Source:</strong> <a href="http://data.un.org/Explorer.aspx" target="_blank" rel="noopener noreferrer">FAOSTAT Food and Agriculture Organization (FAO) Information</a></span>
   </div>
 
+  <div class = page>
+    <div class = block-title>
+      <h1 class = main-title>Where are the Food From?<br>And Where do They Go to?</h1>
+      <div class = usage-instruction>
+        Use the <strong>dropdown menu</strong> to <i>select a food item</i>; <br> 
+        Use the <strong>slider in the center</strong> to <i>change the year</i>; <br>
+        Use the <strong>slider on the top-right</strong> to <i>change the quantity scale</i>; <br>
+        <strong>Double click</strong> on the canvas to <i>reset the view</i>; <br>
+        <strong>Hover on the left/right edge of the canvas</strong> to <i>pan left/right</i>; <br>
+        <strong>Hover over the circles</strong> to <i>see more information</i>; <br>
+        <strong>Click on the circles</strong> to <i>fix/unfix the country you choose</i>.
+      </div>
+    </div>
+
+    <h2 class="selector-title">Choose a Food to See</h2>
+    <div id="p5canvas" style = "position: relative;">
+      <script src="sketch.js"></script>
+      <script src="country.js"></script>
+    </div>
+
+
+  </div>
 
 </body>
 

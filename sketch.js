@@ -67,18 +67,18 @@ function setup() {
   display_countries_translate_y = windowHeight/2+50;
 
   slider = createSlider(1960, 2019, year_now);
-  slider.position(windowWidth/2-250, 710);
+  slider.position(windowWidth/2-250, 655-148);
   slider.style('width', '500px');
   slider.parent('p5canvas');
 
   sliderscaleadjust = createSlider(0, 2000, CircleSizeScale*100);
-  sliderscaleadjust.position(windowWidth/2+140, 215);
+  sliderscaleadjust.position(windowWidth/2+140, 20);
   sliderscaleadjust.style('width', '550px');
   sliderscaleadjust.parent('p5canvas');
 
   // create select box
   sel = createSelect();
-  sel.position(windowWidth/2-50,150);
+  sel.position(windowWidth/2-60,-24);
   sel.id('foodName');
   sel.parent('p5canvas');
   // create select box options
@@ -90,7 +90,7 @@ function setup() {
 function draw() {
   // createCanvas(windowWidth, windowHeight*1.4);
   clear();
-  background(0, 0, 0, 255*0.8);
+  background(255, 255, 255, 255*0);
 
   let scale_get = sliderscaleadjust.value();
   CircleSizeScale = map(scale_get, 0, 2000, 0, 20);
@@ -132,10 +132,10 @@ function draw() {
   // Show the year now
   push();
   textAlign(CENTER,CENTER);
-  fill(250,250,250);
+  fill(0,0,0,255*0.8);
   textSize(36);
   rectMode(CENTER);
-  text (year_get, windowWidth/2+310, 655-131.6);
+  text (year_get, windowWidth/2+310, 655-139);
   pop ();
 
   // Show the unit
@@ -143,7 +143,7 @@ function draw() {
   let unitfoodcapitanow =unitfoodcapita/CircleSizeScale/20;
   push();
   textAlign(LEFT,TOP);
-  fill(250,250,250);
+  fill(0,0,0);
   textSize(10);
   rectMode(CENTER);
   text("Unit of Food Production, Domestic Supply Quantity, Food Used for Processing and Food Used for Food is: "+unitnow+" tonnes",windowWidth/2+280,55,300);

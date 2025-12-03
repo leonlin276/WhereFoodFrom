@@ -112,8 +112,8 @@ class Country {
       // draw the country circle: 
       push();
       textAlign(CENTER,CENTER);
-      fill(250,250,250);
-      textSize(14);
+      fill(0,0,0,255*0.8);
+      textSize(12);
       rectMode(CENTER);
       // text(this.name + '\n' + this.production +'Production', this.x, this.y);
       text(this.name, this.x+50, this.y+50, 150);
@@ -132,7 +132,7 @@ class Country {
       noStroke();
       circle(this.x+i*3, this.y, circleSize_production);
       textAlign(CENTER,CENTER);
-      fill(250,250,250);
+      fill(0,0,0);
       textSize(10);
       rectMode(CENTER);
       text('Production', this.x+i*3, this.y+v, w);
@@ -145,7 +145,7 @@ class Country {
       noStroke();
       circle(this.x+i*2, this.y, circleSize_domsly);
       textAlign(CENTER,CENTER);
-      fill(250,250,250);
+      fill(0,0,0);
       textSize(10);
       rectMode(CENTER);
       text('Domestic Supply Quantity', this.x+i*2, this.y+v, w);
@@ -158,7 +158,7 @@ class Country {
       noStroke();
       circle(this.x+15+i*4, this.y-10, circleSize_foodcapita);
       textAlign(CENTER,CENTER);
-      fill(250,250,250);
+      fill(0,0,0);
       textSize(10);
       rectMode(CENTER);
       text('Supply Quantity per Capita', this.x+i*4, this.y+v, w);
@@ -174,7 +174,7 @@ class Country {
       pop();
       push();
       textAlign(CENTER,CENTER);
-      fill(250,250,250);
+      fill(0,0,0);
       textSize(10);
       rectMode(CENTER);
       text('Food Used for Eating', this.x+i, this.y+v, w);
@@ -190,7 +190,7 @@ class Country {
       pop();
       push();
       textAlign(CENTER,CENTER);
-      fill(250,250,250);
+      fill(0,0,0);
       textSize(10);
       rectMode(CENTER);
       text('Food Used for Processing', this.x, this.y+v, 120);
